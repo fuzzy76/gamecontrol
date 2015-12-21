@@ -3,6 +3,8 @@
 
 // Use sudo to run this script as your gameserver user
 
+// @todo fs_homepath and fs_basepath support
+
 $gamecontroller = new GameController;
 $gamecontroller->execute($argv);
 
@@ -30,11 +32,11 @@ Class GameController {
   function start($configname) {
     $date = date('m/d/y H:i:s');
     $runline = "./coduo_lnxded +set gamestartup \"$date\" +set com_hunkmegs 512 ";
-    $runline .= "+set sv_punkbuster 0 +set fs_homepath {$this->basedir} ";
+    $runline .= "+set fs_homepath {$this->basedir} ";
     $runline .= "+set fs_game BrothersInArms_mod +set dedicated 2 ";
     $runline .= "+exec awe.cfg +exec dedicateduo.cfg +set net_port 28960";
     $this->gameserver = new Process($runline);
-// @todo save to pid file
+    file_put_contents('~/.pid', $this->gameserver->getPid());
 
   }
 
